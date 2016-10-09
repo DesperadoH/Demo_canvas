@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CanvasDemo2</title>
+	<style>
+		#canvas{
+			display: block;
+			border:1px solid black;
+			margin:50px auto;			
+		}
+	</style>
+</head>
+<body>
+	<!-- 倒计时 -->
+	<canvas id="canvas" width="1024" height="768"> </canvas>
+
+
+	<script>
+
+		/*  一些绘制接口 
+		 *	context.moveTo()  context.lineTo() 
+		 * 	
+		 *
+		 * 	context.beginPath() context.closePath()
+		 *
+		 *	context.lineWidth = 5
+		 * 	context.strokeStyle = "#112233"
+		 *  context.fillStyle = "red"	
+		 *
+		 *	context.stroke()
+		 *	context.fill()
+		 * 
+		 */
+		
+
+
+		window.onload = function(){
+			var canvas = document.getElementById("canvas");
+				// canvas.width = 1024;
+				// canvas.height = 768;
+			var context ;
+			if(canvas.getContext){
+				context = canvas.getContext("2d");
+
+			}else{
+				alert('当前不支持canvas');
+			}
+			// 基于context(接口) 先设置状态再进行绘图
+			// 状态设置
+			
+			//开始
+			context.beginPath();
+
+			context.moveTo(100,100);
+			context.lineTo(700,700);
+			context.lineTo(100,700);
+			context.lineTo(100,100);
+			// context.lineWidth = 5; 线宽度5px
+			// context.strokeStyle = "#005588"; 颜色
+
+			context.lineWidth = 4;
+			context.strokeStyle = "red";
+			context.stroke();//笔画 线条
+			//结束
+			context.closePath();
+
+			context.beginPath();
+
+
+			context.moveTo(200,100);
+			context.lineTo(700,600);
+			context.strokeStyle = "black";
+			context.stroke();
+			context.closePath();
+			//基于状态的
+		}
+
+
+
+	</script>
+</body>
+</html>

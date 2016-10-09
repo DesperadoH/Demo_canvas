@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo5_clock</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script src="digit.js"></script>
+	<script>
+	//render a digit
+	//点阵 二维数组
+		// 5 
+		// [
+		// 	  [1,1,1,1,1,1,1],
+		// 	  [1,1,0,0,0,0,0],
+		// 	  [1,1,0,0,0,0,0],
+		// 	  [1,1,1,1,1,1,0],
+		// 	  [0,0,0,0,0,1,1],
+		// 	  [0,0,0,0,0,1,1],
+		// 	  [0,0,0,0,0,1,1],
+		// 	  [0,0,0,0,0,1,1],
+		// 	  [1,1,0,0,0,1,1],
+		// 	  [0,1,1,1,1,1,0]
+		// 	  
+		// ]
+
+		var ball = { x:512, y:100, r:20, g:2, vx:-4, vy: 0, color:"#005588"};
+	window.onload = function(){
+		var WINDOW_WIDTH = 1024;
+		var WINDOW_HEIGHT = 768;
+		var RADIUS = 8;
+		var TOP = 60;
+		var LEFT = 30;
+		var	canvas = document.getElementById("canvas");
+		var context = canvas.getContext("2d");
+		var endTime = new Date(2016,9,10,15,10,10);
+		//不能超过24*4 = 96hours   4天 
+		var curShowTimeSec = 0;
+
+
+		canvas.width = WINDOW_WIDTH;
+		canvas.height = WINDOW_HEIGHT;
+
+		curShowTimeSec = getRestTime();
+
+		setInterval(
+			function(){
+				render(context);
+				update();
+			}
+			,1000)
+
+
+
+		function update(){
+			var nestShowTimeSec = getRestTime();
+			var nextHours = parseInt(nestShowTimeSec/3600);
+			var nextMin = parseInt((nestShowTimeSec - nextHours*3600)/60);
+			var nextSec = parseInt(nestShowTimeSec % 60);
+
+			var curHours = parseInt( curShowTimeSec / 3600 );
+			var curMin = parseInt( (curShowTimeSec - curHours*3600) / 60 );
+			var curSec = parseInt( curShowTimeSec % 60);
+
+			if( nextSec != curSec ){
+				curShowTimeSec = nestShowTimeSec;
+			}
+		}
+
+		function render(cxt){
+
+			cxt.clearRect(0, 0, cxt.canvas.width, cxt.canvas.height);
+			var hours = parseInt( curShowTimeSec / 3600 );
+			var min = parseInt( (curShowTimeSec - hours*3600) / 60 );
+			var seconds = parseInt( curShowTimeSec % 60);
+			console.log(hours);
+			//小时
+			renderDigit(LEFT, TOP, parseInt(hours/10), cxt);
+			renderDigit(LEFT + 15*(RADIUS+1), TOP, parseInt(hours%10), cxt);
+			//冒号
+			renderDigit(LEFT + 30*(RADIUS+1), TOP, 10 , cxt);
+			//分
+			renderDigit(LEFT + 39*(RADIUS+1), TOP, parseInt(min/10), cxt);
+			renderDigit(LEFT + 54*(RADIUS+1), TOP, parseInt(min%10), cxt);
+			//冒号
+			renderDigit(LEFT + 69*(RADIUS+1), TOP, 10 , cxt);
+			//秒
+			renderDigit(LEFT + 78*(RADIUS+1), TOP, parseInt(seconds/10), cxt);
+			renderDigit(LEFT + 93*(RADIUS+1), TOP, parseInt(seconds%10), cxt);
+		}
+
+		function renderDigit(x , y, num, cxt){
+			cxt.fillStyle = "rgb(0,102,153)";
+			for(var i = 0; i < digit[num].length ; i++){
+				for(var j = 0, len = digit[num][i].length; j < len; j++){
+					if(digit[num][i][j] === 1){
+						cxt.beginPath();
+						cxt.arc(x+ 2*j*(RADIUS+1)+(RADIUS+1), y+ 2*i*(RADIUS+1)+(RADIUS+1), RADIUS, 0, 2*Math.PI);
+						cxt.closePath();
+						cxt.fill();
+					}
+				}
+			}
+		}
+
+
+
+		function getRestTime(){
+			var curTime = new Date();
+			var ret = endTime.getTime() - curTime.getTime();
+				ret = Math.round(ret/1000);
+			return ret >= 0 ? ret : 0;
+		}
+
+	}
+
+		
+
+	</script>
+</body>
+</html>

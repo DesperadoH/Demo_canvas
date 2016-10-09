@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo3_colors</title>
+</head>
+<body>
+	<canvas id="canvas" width="800" height="800" style="margin:50px auto;border:1px solid black;display:block;"></canvas>
+
+
+	<script>
+	window.onload = function(){
+		var tangram = [
+			{
+				pos: [
+						{x:0, y:0}, 
+						{x:800, y:0},
+						{x:400, y:400}
+					 ],
+				color: "#caff67"
+			},
+			{
+				pos: [
+						{x:0, y:0}, 
+						{x:400, y:400},
+						{x:0, y:800}
+					 ],
+				color: "#67becf"
+			},
+			{
+				pos: [
+						{x:800, y:0}, 
+						{x:800, y:400},
+						{x:600, y:600},
+						{x:600, y:200}
+					 ],
+				color: "#ef3d61"
+			},
+			{
+				pos: [
+						{x:600, y:200}, 
+						{x:600, y:600},
+						{x:400, y:400}
+					 ],
+				color: "#f9f51a"
+			},
+			{
+				pos: [
+						{x:400, y:400}, 
+						{x:600, y:600},
+						{x:400, y:800},
+						{x:200, y:600}
+					 ],
+				color: "#a594c0"
+			},
+			{
+				pos: [
+						{x:200, y:600}, 
+						{x:400, y:800},
+						{x:0, y:800}
+					 ],
+				color: "#fa8ecc"
+			},
+			{
+				pos: [
+						{x:800, y:400}, 
+						{x:800, y:800},
+						{x:400, y:800}
+					 ],
+				color: "#f6ca29"
+			}
+		] ;
+
+		var canvas = document.getElementById("canvas");
+		var cxt = canvas.getContext("2d");
+
+		for(var i = 0 ; i < tangram.length; i++){
+			draw(tangram[i], cxt);
+		}
+
+		function draw(tangram, cxt){
+			cxt.beginPath();
+			cxt.moveTo(tangram.pos[0].x, tangram.pos[0].y);
+			for(var i = 1; i < tangram.pos.length; i++){
+				cxt.lineTo(tangram.pos[i].x, tangram.pos[i].y)
+			}
+			cxt.closePath();
+			cxt.fillStyle = tangram.color;
+			cxt.fill();
+			cxt.lineWidth = 2;
+			cxt.strokeStyle = "black";
+			cxt.stroke();
+		}
+
+	}
+
+
+	</script>
+</body>
+</html>
