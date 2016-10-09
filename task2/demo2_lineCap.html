@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo1</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+		// 带帽子的线条
+		// butt(default)
+		// round
+		// square
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1024;
+			canvas.height = 768;
+		var context = canvas.getContext("2d");
+
+		context.lineWidth = 10;
+		context.strokeStyle = "black";
+		context.beginPath();
+		context.moveTo(100,100);
+		context.lineTo(200,200);
+		context.lineCap = "butt";
+		context.stroke();
+
+		
+		context.beginPath();
+		context.moveTo(200,100);
+		context.lineTo(300,200);
+		context.lineCap = "round";
+		context.stroke();
+
+
+		context.beginPath();
+		context.moveTo(300,100);
+		context.lineTo(400,200);
+		context.lineCap = "square";
+
+		context.stroke();
+		//moveTo lineTo头尾有帽子
+	}
+
+
+	</script>
+</body>
+</html>
