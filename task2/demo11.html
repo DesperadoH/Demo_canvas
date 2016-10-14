@@ -22,6 +22,9 @@
 
 	<script>
 		// 图像变换和状态保存 save()  restore()
+		// !!!!!!!!!!!!!!!!!
+		// 缩放这个函数 scale() 	缩放产生的副作用，有时候不得不放弃一些效果；
+		// 或者采用自己编写的函数
 window.onload = function(){
 		var canvas = document.getElementById("canvas");
 			canvas.width = document.body.clientWidth;
@@ -54,7 +57,6 @@ window.onload = function(){
 						R: R,
 						x: x,
 						y: y,
-						lineWidth: 10,
 						lineJoin: "round"
 					}
 				);
@@ -70,38 +72,40 @@ window.onload = function(){
 			x = obj.x,
 			y = obj.y;
 
-			cxt.lineJoin = obj.lineJoin || "miter";
-			cxt.lineWidth = obj.lineWidth || 10;
+			cxt.lineJoin = obj.lineJoin || "round";
+			
 		//绘制轮廓
 		cxt.save();
 		// 对一个五角星位移 x,y
 		cxt.translate(x,y);
 		// 对一个五角星旋转 rot角度
 		cxt.rotate(rot);
+		// scale
+		cxt.scale(r,r);
 
-
-		drawPath(cxt);
-		//绘制出在(x,y) 大小为R, 旋转为rot度的五角
+		starPath(cxt);
+		
 		cxt.fillStyle = "#fb3";
-		cxt.strokeStyle = "#fd5";
-		cxt.lineWidth = 3;
+		// cxt.strokeStyle = "#fd5";
+		// cxt.lineWidth = 3; 
+		// 外边框会被scale放大!!!!!!!只好放弃外边框绘制
 		cxt.fill();
-		cxt.stroke();
+		// cxt.stroke();
 
 		cxt.restore();
 
 	}
-	function drawPath(cxt){
+	function starPath(cxt){
 
 		cxt.beginPath();
 		for(var i = 0 ;i < 5 ; i ++){
 			cxt.lineTo(
-				Math.cos((18 + 72*i )/180*Math.PI)*10 ,
-				-Math.sin((18 + 72*i )/180*Math.PI)*10 
+				Math.cos((18 + 72*i )/180*Math.PI),
+				-Math.sin((18 + 72*i )/180*Math.PI) 
 				);
 			cxt.lineTo(
-				Math.cos((54 + 72*i )/180*Math.PI)*5 ,
-				-Math.sin((54 + 72*i )/180*Math.PI)*5 
+				Math.cos((54 + 72*i )/180*Math.PI)*0.5 ,
+				-Math.sin((54 + 72*i )/180*Math.PI)*0.5 
 				);
 		}
 		cxt.closePath();
