@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo11_use</title>
+	<style>
+		body,html{
+			width:100%;
+			height:100%;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+		// 图像变换和状态保存 save()  restore()
+window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
+		var context = canvas.getContext("2d");
+
+			context.fillStyle = "black";
+			drawRect(context, 0, 0, canvas.width, canvas.height, 0, 0, "black");
+
+			for(var i = 0 ; i < 100; i++){
+				var r = Math.random()*10 + 10;
+				var R = r * 2;
+				var x = Math.random()*canvas.width;
+				var y = Math.random()*canvas.height;
+					if(x < R){
+						x = R + Math.random()*10 + 10;
+					}else if(x > canvas.width){
+						x = canvas.width - R;
+					}
+					if(y < R){
+						y = R + Math.random()*10 + 10;
+					}else if(y > canvas.height){
+						y = canvas.height - R;
+					}
+
+				drawStar(
+					{
+						cxt: context,
+						r: r,
+						R: R,
+						x: x,
+						y: y,
+						lineWidth: 10,
+						lineJoin: "round"
+					}
+				);
+			}
+
+	}
+	//cxt, r, R, x, y, rot, lineJoin
+	function drawStar(obj){
+		var cxt = obj.cxt,
+			rot = obj.rot || Math.random()*90,
+			r = obj.r,
+			R = r*2,
+			x = obj.x,
+			y = obj.y;
+
+			cxt.lineJoin = obj.lineJoin || "miter";
+			cxt.lineWidth = obj.lineWidth || 10;
+		//绘制轮廓
+		cxt.save();
+		// 对一个五角星位移 x,y
+		cxt.translate(x,y);
+		// 对一个五角星旋转 rot角度
+		cxt.rotate(rot);
+
+
+		drawPath(cxt);
+		//绘制出在(x,y) 大小为R, 旋转为rot度的五角
+		cxt.fillStyle = "#fb3";
+		cxt.strokeStyle = "#fd5";
+		cxt.lineWidth = 3;
+		cxt.fill();
+		cxt.stroke();
+
+		cxt.restore();
+
+	}
+	function drawPath(cxt){
+
+		cxt.beginPath();
+		for(var i = 0 ;i < 5 ; i ++){
+			cxt.lineTo(
+				Math.cos((18 + 72*i )/180*Math.PI)*10 ,
+				-Math.sin((18 + 72*i )/180*Math.PI)*10 
+				);
+			cxt.lineTo(
+				Math.cos((54 + 72*i )/180*Math.PI)*5 ,
+				-Math.sin((54 + 72*i )/180*Math.PI)*5 
+				);
+		}
+		cxt.closePath();
+	}
+
+
+
+	function drawRect(cxt, x, y, width, height, borderWidth, borderColor, fillColor){
+			cxt.beginPath();
+			cxt.moveTo(x, y);
+			cxt.lineTo(x + width, y);
+			cxt.lineTo(x + width, y + height);
+			cxt.lineTo(x , y + height);
+			cxt.closePath();
+
+			cxt.lineWidth = borderWidth;
+			cxt.fillStyle = fillColor;
+			cxt.strokeStyle = borderColor;
+
+			cxt.fill();
+			cxt.stroke();
+		}
+
+
+	</script>
+</body>
+</html>
