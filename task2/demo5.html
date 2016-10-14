@@ -14,6 +14,7 @@
 		// miter(default)
 		// bevel
 		// round
+		// context.miterLimit = 10 (默认)只有当lineJoin是miter的时候才有效
 	window.onload = function(){
 		var canvas = document.getElementById("canvas");
 			canvas.width = 1800;
@@ -42,6 +43,7 @@
 				lineWidth: 10,
 				lineJoin: "bevel"
 			});
+			
 			drawStar({
 				cxt: context,
 				r: 120,

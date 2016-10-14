@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo6_manyStar</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+		// 五角星
+		//线条的连接 lineJoin
+		// miter(default)
+		// bevel
+		// round
+		// context.miterLimit = 10 (默认)只有当lineJoin是miter的时候才有效
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1800;
+			canvas.height = 1800;
+		var context = canvas.getContext("2d");
+
+			context.fillStyle = "black";
+			drawRect(context, 0, 0, canvas.width, canvas.height, 0, 0, "black");
+			
+			// drawStar({
+			// 	cxt: context,
+			// 	r: 120,
+			// 	R: 240,
+			// 	x: 240,
+			// 	y: 260,
+			// 	lineWidth: 10,
+			// 	lineJoin: "round"
+			// });
+			for(var i = 0 ; i < 200; i++){
+				drawStar({
+					cxt: context,
+					r: Math.random()*10 + 10,
+					R: Math.random()*20 + 20,
+					x: Math.random()*canvas.width,
+					y: Math.random()*canvas.height,
+					lineWidth: 10,
+					lineJoin: "round"
+				});
+			}
+
+	}
+	//cxt, r, R, x, y, rot, lineJoin
+	function drawStar(obj){
+		cxt = obj.cxt;
+		rot = obj.rot || Math.random()*90;
+		cxt.lineJoin = obj.lineJoin || "miter";
+		cxt.lineWidth = obj.lineWidth || 10;
+		r = obj.r;
+		R = r*2;
+		x = obj.x;
+		y = obj.y;
+		cxt.beginPath();
+		
+		for(var i = 0 ;i < 5 ; i ++){
+			cxt.lineTo(
+				Math.cos((18 + 72*i - rot)/180*Math.PI)*R + x,
+				-Math.sin((18 + 72*i - rot)/180*Math.PI)*R + y
+				);
+			cxt.lineTo(
+				Math.cos((54 + 72*i - rot)/180*Math.PI)*r + x,
+				-Math.sin((54 + 72*i - rot)/180*Math.PI)*r + y
+				);
+		}
+		cxt.closePath();
+		cxt.fillStyle = "#fb3";
+		cxt.strokeStyle = "#fd5";
+		cxt.lineWidth = 3;
+		cxt.fill();
+		cxt.stroke();
+	}
+	function drawRect(cxt, x, y, width, height, borderWidth, borderColor, fillColor){
+			cxt.beginPath();
+			cxt.moveTo(x, y);
+			cxt.lineTo(x + width, y);
+			cxt.lineTo(x + width, y + height);
+			cxt.lineTo(x , y + height);
+			cxt.closePath();
+
+			cxt.lineWidth = borderWidth;
+			cxt.fillStyle = fillColor;
+			cxt.strokeStyle = borderColor;
+
+			cxt.fill();
+			cxt.stroke();
+		}
+
+	</script>
+</body>
+</html>
