@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo8_translate</title>
+	<style>
+		body,html{
+			width:100%;
+			height:100%;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+		// 图像变换和状态保存 save()  restore()
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
+		var context = canvas.getContext("2d");
+
+
+			context.save();
+			context.fillStyle = "red";
+			context.translate(100, 100);
+			// 移动了100 100 而不是移动到 100 100
+			context.fillRect(0, 0, 200, 200);
+			// 要反向操作归回原来的点， 但是这样太麻烦
+			// context.translate(-100, -100);
+			context.restore();
+
+
+			context.translate(300,300);
+			context.fillStyle = "green";
+			context.fillRect(0, 0, 200, 200);
+
+		}
+
+	</script>
+</body>
+</html>

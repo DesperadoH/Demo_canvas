@@ -2,7 +2,19 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>demo6_manyStar</title>
+	<title>demo7_change</title>
+	<style>
+		body,html{
+			width:100%;
+			height:100%;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+		}
+
+	</style>
 </head>
 <body>
 	<canvas id="canvas"></canvas>
@@ -17,8 +29,8 @@
 		// context.miterLimit = 10 (默认)只有当lineJoin是miter的时候才有效
 	window.onload = function(){
 		var canvas = document.getElementById("canvas");
-			canvas.width = 1800;
-			canvas.height = 1800;
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
 		var context = canvas.getContext("2d");
 
 			context.fillStyle = "black";
@@ -33,16 +45,33 @@
 			// 	lineWidth: 10,
 			// 	lineJoin: "round"
 			// });
-			for(var i = 0 ; i < 200; i++){
-				drawStar({
-					cxt: context,
-					r: Math.random()*10 + 10,
-					R: Math.random()*20 + 20,
-					x: Math.random()*canvas.width,
-					y: Math.random()*canvas.height,
-					lineWidth: 10,
-					lineJoin: "round"
-				});
+			for(var i = 0 ; i < 100; i++){
+				var r = Math.random()*10 + 10;
+				var R = r * 2;
+				var x = Math.random()*canvas.width;
+				var y = Math.random()*canvas.height;
+					if(x < R){
+						x = R + Math.random()*10 + 10;
+					}else if(x > canvas.width){
+						x = canvas.width - R;
+					}
+					if(y < R){
+						y = R + Math.random()*10 + 10;
+					}else if(y > canvas.height){
+						y = canvas.height - R;
+					}
+
+				drawStar(
+					{
+						cxt: context,
+						r: r,
+						R: R,
+						x: x,
+						y: y,
+						lineWidth: 10,
+						lineJoin: "round"
+					}
+				);
 			}
 
 	}
@@ -53,28 +82,38 @@
 		cxt.lineJoin = obj.lineJoin || "miter";
 		cxt.lineWidth = obj.lineWidth || 10;
 		r = obj.r;
-		R = r*2;
+		R = obj.R || r*2;
 		x = obj.x;
 		y = obj.y;
-		cxt.beginPath();
-		
-		for(var i = 0; i < 5 ; i ++){
-			cxt.lineTo(
-				Math.cos((18 + 72*i - rot)/180*Math.PI)*R + x,
-				-Math.sin((18 + 72*i - rot)/180*Math.PI)*R + y
-				);
-			cxt.lineTo(
-				Math.cos((54 + 72*i - rot)/180*Math.PI)*r + x,
-				-Math.sin((54 + 72*i - rot)/180*Math.PI)*r + y
-				);
-		}
-		cxt.closePath();
+
+		//绘制轮廓
+		drawPath(cxt);
+		//绘制出在(x,y) 大小为R, 旋转为rot度的五角
+
 		cxt.fillStyle = "#fb3";
 		cxt.strokeStyle = "#fd5";
 		cxt.lineWidth = 3;
 		cxt.fill();
 		cxt.stroke();
 	}
+	function drawPath(cxt){
+
+		cxt.beginPath();
+		for(var i = 0 ;i < 5 ; i ++){
+			cxt.lineTo(
+				Math.cos((18 + 72*i )/180*Math.PI)*R + x,
+				-Math.sin((18 + 72*i )/180*Math.PI)*R + y
+				);
+			cxt.lineTo(
+				Math.cos((54 + 72*i )/180*Math.PI)*r + x,
+				-Math.sin((54 + 72*i )/180*Math.PI)*r + y
+				);
+		}
+		cxt.closePath();
+	}
+
+
+
 	function drawRect(cxt, x, y, width, height, borderWidth, borderColor, fillColor){
 			cxt.beginPath();
 			cxt.moveTo(x, y);

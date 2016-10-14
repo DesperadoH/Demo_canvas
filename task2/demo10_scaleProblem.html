@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo9_use</title>
+	<style>
+		body,html{
+			width:100%;
+			height:100%;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+		// scale()的问题，除了放大倍数 左上角坐标也会相应改变
+window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
+		var context = canvas.getContext("2d");
+
+			context.lineWidht = 5;
+			context.save();
+			context.scale( 1 , 1 );
+			context.strokeRect(50, 50, 200, 200);
+			context.restore();
+
+			context.save();
+			context.scale( 2 , 2 );
+			context.strokeRect(50, 50, 200, 200);
+			context.restore();
+
+			context.save();
+			context.scale( 3 , 3 );
+			context.strokeRect(50, 50, 200, 200);
+			context.restore();
+	}
+
+
+	</script>
+</body>
+</html>
