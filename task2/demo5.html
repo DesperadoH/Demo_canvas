@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo5</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+		// 五角星
+		//线条的连接 lineJoin
+		// miter(default)
+		// bevel
+		// round
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1800;
+			canvas.height = 1800;
+		var context = canvas.getContext("2d");
+
+			
+			// drawStar(context, 120, 240, 240, 260 );
+			// drawStar(context, 120, 240, 720, 260 );
+			// drawStar(context, 120, 240, 480, 720 );
+			drawStar({
+				cxt: context,
+				r: 120,
+				R: 240,
+				x: 240,
+				y: 260,
+				lineWidth: 10,
+				lineJoin: "round"
+			});
+			drawStar({
+				cxt: context,
+				r: 120,
+				R: 240,
+				x: 720,
+				y: 260,
+				lineWidth: 10,
+				lineJoin: "bevel"
+			});
+			drawStar({
+				cxt: context,
+				r: 120,
+				R: 240,
+				x: 480,
+				y: 600,
+				lineWidth: 10,
+				lineJoin: "miter"
+			});
+
+	}
+	//cxt, r, R, x, y, rot, lineJoin
+	function drawStar(obj){
+		cxt = obj.cxt;
+		rot = obj.rot || 0;
+		cxt.lineJoin = obj.lineJoin || "miter";
+		cxt.lineWidth = obj.lineWidth || 10;
+		r = obj.r;
+		R = obj.R;
+		x = obj.x;
+		y = obj.y;
+		cxt.beginPath();
+		
+		for(var i = 0 ;i < 5 ; i ++){
+			cxt.lineTo(
+				Math.cos((18 + 72*i - rot)/180*Math.PI)*R + x,
+				-Math.sin((18 + 72*i - rot)/180*Math.PI)*R + y
+				);
+			cxt.lineTo(
+				Math.cos((54 + 72*i - rot)/180*Math.PI)*r + x,
+				-Math.sin((54 + 72*i - rot)/180*Math.PI)*r + y
+				);
+		}
+		cxt.closePath();
+		cxt.stroke();
+	}
+
+	</script>
+</body>
+</html>
