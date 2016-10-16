@@ -31,14 +31,18 @@ window.onload = function(){
 			canvas.height = document.body.clientHeight;
 		var context = canvas.getContext("2d");
 
-			context.fillStyle = "black";
-			drawRect(context, 0, 0, canvas.width, canvas.height, 0, 0, "black");
+		var linearGrad = context.createLinearGradient(0,0,0,canvas.height);
+			linearGrad.addColorStop(0.0,"black");
+			linearGrad.addColorStop(1.0,"#035");
+			context.fillStyle = linearGrad;
+			// drawRect(context, 0, 0, canvas.width, canvas.height, 0, 0, "black");
+			context.fillRect(0,0,canvas.width,canvas.height);
 
 			for(var i = 0 ; i < 100; i++){
-				var r = Math.random()*10 + 10;
+				var r = Math.random()*5 + 5;
 				var R = r * 2;
 				var x = Math.random()*canvas.width;
-				var y = Math.random()*canvas.height;
+				var y = Math.random()*canvas.height * 0.65;
 					if(x < R){
 						x = R + Math.random()*10 + 10;
 					}else if(x > canvas.width){
@@ -46,8 +50,6 @@ window.onload = function(){
 					}
 					if(y < R){
 						y = R + Math.random()*10 + 10;
-					}else if(y > canvas.height){
-						y = canvas.height - R;
 					}
 
 				drawStar(
