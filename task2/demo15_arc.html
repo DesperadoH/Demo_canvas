@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo15_arcTo</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+
+	//曲线绘制
+	// context.arc(
+	// 	centerx, centery,radius,startingAngle,endingAngle,
+	// 	anticlockwise=false
+	// )
+	// 
+	// 圆角矩形
+	//  fillRect  strokeRect 是Canvas的API
+	// 
+	//  context.arcTo(x1,y1,x2,y2,radius);
+	// 
+	// 
+
+
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1024;
+			canvas.height = 768;
+		var context = canvas.getContext("2d");
+		// roundedCornerRectangle(context, 30,30,200,200,20);
+
+		context.beginPath();
+		context.moveTo(350,350);
+
+		context.arcTo(250,350,250,400,100);
+		// context.lineTo(240,240);
+		context.strokeStyle = "black";
+		context.lineWidth = 2;
+		context.stroke();
+
+}
+	function roundedCornerRectangle(cxt, x, y, width, height, radius, color, lineWidth){
+		if(2*radius > width || 2*radius > height){
+			return;
+		}
+
+		cxt.save();
+		cxt.translate(x,y);
+		pathRoundRect(cxt, width, height, radius);
+		cxt.strokeStyle = color || "black";
+		cxt.lineWidth = lineWidth || 10;
+		cxt.stroke();
+		cxt.restore();
+	}
+	function pathRoundRect(cxt, width, height, radius){
+		cxt.beginPath();
+		cxt.arc(width-radius,height-radius,radius,0,0.5*Math.PI);
+		cxt.lineTo(radius,height);
+		cxt.arc(radius,height-radius,radius,0.5*Math.PI,Math.PI);
+		cxt.lineTo(0,radius);
+		cxt.arc(radius,radius,radius,Math.PI,1.5*Math.PI);
+		cxt.lineTo(width-radius,0);
+		cxt.arc(width-radius,radius,radius,1.5*Math.PI,2*Math.PI);
+		cxt.closePath();
+	}
+
+	</script>
+</body>
+</html>
