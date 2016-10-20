@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo20_shadow</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1200;
+			canvas.height = 1200;
+		var context = canvas.getContext("2d");
+
+		// 阴影
+		// context.shadowColor
+		// context.shadowOffsetX
+		// context.shadowOffsetY
+		// 
+		// context.shadowBlur 阴影模糊程度
+
+		context.fillStyle = "yellow";
+		context.font = "bold 120px Arial";
+
+		context.shadowColor = "gray";
+		context.shadowOffsetX = 10;
+		context.shadowOffsetY = 10;
+		context.shadowBlur = 5;
+
+		
+		context.textAlign = "left";
+		context.textBaseline = "middle"
+		context.fillText("canvas",100,100);
+
+		context.fillStyle = "blue";
+		context.fillRect(600,100,400,400);
+
+
+
+
+	}
+
+
+	</script>
+</body>
+</html>
