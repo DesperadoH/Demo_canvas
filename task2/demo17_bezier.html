@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo17_bezier</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1024;
+			canvas.height = 768;
+		var context = canvas.getContext("2d");
+
+		// 二次贝赛尔曲线
+		//
+		// tinyurl.com/html5quadratic
+		
+		//初始点
+		//context.moveTo(x0,y0);
+
+		//context.quadraticCurveTo(x1,y1,x2,y2);
+		fillMoon1(context,0.8,400,200,200,30);
+		drawLand(context);
+
+		// 三次贝塞尔曲线
+		// 与二次的唯一区别是 三次贝赛尔曲线有2个控制点
+		// 
+		// context.moveTo(x0,y0);
+		// context.bezierCurveTo(
+		// 					x1,y1
+		// 					x2,y2
+		// 					x3,y3
+		// 					)
+
+		//绿地
+		function drawLand(cxt){
+			cxt.save();
+				cxt.beginPath();
+				cxt.moveTo(0,600);
+				cxt.bezierCurveTo(540,400,660,800,1200,600);
+				cxt.lineTo(1200,800);
+				cxt.lineTo(0,800);	
+				cxt.closePath();
+
+				var landStyle = cxt.createLinearGradient(0,800,0,0);
+					landStyle.addColorStop(0.0, "#030");
+					landStyle.addColorStop(1.0, "#580");
+				cxt.fillStyle = landStyle;
+				cxt.fill();
+
+
+			cxt.restore();
+		}
+
+
+		function fillMoon1(cxt,d,x,y,r,rot){
+			cxt.save();
+
+			cxt.translate(x,y);
+			cxt.rotate(rot*Math.PI/180);
+			cxt.scale(r,r);
+
+			pathMoon(cxt,d);
+			cxt.fillStyle = "#fb5";
+			cxt.fill();
+
+			cxt.restore();
+
+		}
+
+		function pathMoon(cxt,d){
+			cxt.beginPath();
+
+			cxt.arc(0,0,1,0.5*Math.PI,1.5*Math.PI,true);
+			cxt.moveTo(0,-1);
+			cxt.quadraticCurveTo(d,0,0,1);
+			cxt.closePath();
+		}
+
+
+
+
+
+
+
+
+	}
+
+
+	</script>
+</body>
+</html>

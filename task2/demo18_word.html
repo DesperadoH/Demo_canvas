@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo18_word</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1024;
+			canvas.height = 768;
+		var context = canvas.getContext("2d");
+
+		// 文字的渲染
+		// context.font = "bold 40px Arial";
+		// context.fillText(string, x, y, [length]);
+		// context.strokeText(string,x,y,[length]);
+
+		context.font = "bold 40px Arial";
+		context.fillStyle = "#058";
+		context.fillText("hello world1",100,100);
+		context.lineWidth = 2;
+		context.strokeText("hello world2",100,200);
+		
+		//可以把文字长度强行变为100
+		context.strokeText("hello world3",100,300, 100);
+		
+		//可以用渐变色
+		var grad = context.createLinearGradient(0,0,800,0);
+			grad.addColorStop(0.0,"red");
+			grad.addColorStop(0.25,"orange");
+			grad.addColorStop(0.75,"yellow");
+			grad.addColorStop(1.0,"green");
+		context.fillStyle = grad;
+		context.fillText("hello world4", 100 , 400);
+
+
+		//可以用图片当背景
+		var img = new Image();
+		img.src = "1.jpg";
+			img.onload = function(){
+				var pattern = context.createPattern(img,"repeat");
+				context.fillStyle = pattern;
+				context.font = "bold 100px Arial";
+				context.fillText("Canvas!", 100, 520);
+				//也可以跟stroke一起使用来描边
+				context.strokeText("Canvas!",100,520);
+			}
+		
+
+	}
+
+
+	</script>
+</body>
+</html>
