@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo19_font1</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = 1200;
+			canvas.height = 1200;
+		var context = canvas.getContext("2d");
+
+		// 文字的渲染
+		// font
+		// 默认值："20px sans-serif"
+		// context.font =
+		// 			font-style  font-variant  font-weight
+		// 			font-size   font-family
+
+
+		// font-style :
+		// 		normal (default)  italic(斜字体)  oblique（倾斜）
+		context.fillStyle = "#058";
+
+		context.font = "bold 40px sans-serif";
+		context.fillText("normal(default) bold 40px sans-serif", 50,50);
+
+		context.font = "italic bold 40px sans-serif";
+		context.fillText("italic bold 40px sans-serif", 50,100);
+
+		context.font = "oblique bold 40px sans-serif";
+		context.fillText("oblique bold 40px sans-serif", 50,150);
+
+
+		// font-variant:
+		// 		normal   small-caps(只有使用英文的时候)
+		context.font = "bold 40px sans-serif";
+		context.fillText("small-caps bold 40px sans-serif", 50,220);
+		context.font = "small-caps bold 40px sans-serif";
+		context.fillText("small-caps bold 40px sans-serif Canvas", 50,270);
+
+		// font-weight
+		// 		lighter
+		// 		normal(default)
+		// 		bold
+		// 		bolder
+		// 		100 200 300 400(normal) 500 600 700(bold) 800 900
+		context.font = "lighter 40px sans-serif";
+		context.fillText("lighter 40px sans-serif 浏览器还未支持", 50,320);
+		context.font = "normal 40px sans-serif";
+		context.fillText("normal 40px sans-serif", 50,370);
+		context.font = "bold 40px sans-serif";
+		context.fillText("bold 40px sans-serif", 50,420);
+		context.font = "bloder 40px sans-serif";
+		context.fillText("bloder 40px sans-serif 浏览器还未支持", 50,470);
+		// font-size:
+		// 		20px (default)
+		// 		2em
+		// 		150%
+		// 		
+
+		// font-family
+		// 设置多种字体备选  支持@font-face web安全字体
+
+		// 文本对齐
+		// context.textAlign : 水平对齐方式
+		//  		left  center  right 参考点是给定文本的基本坐标值
+		context.fillStyle = "#058";
+		context.font = "bold 40px sans-serif";
+
+		context.textAlign = "left";
+		context.fillText("textAlign = left", 50, 550);
+
+		context.textAlign = "center";
+		context.fillText("textAlign = center", 50, 600);
+
+		context.textAlign = "right";
+		context.fillText("textAlign = right", 50, 650);
+
+		//context.textBaseline 调整文本的垂直对齐方式
+		// 		top middle bottom  
+		// 		alphabetic(default拉丁) ideographic(汉字) hanging印度
+		context.textAlign = "left";
+		context.textBaseline = "top";
+		context.fillText("baseline = top", 50, 700);
+
+		context.textBaseline = "middle";
+		context.fillText("baseline = middle", 550, 700);
+
+		context.textBaseline = "bottom";
+		context.fillText("baseline = bottom", 1050, 700);
+
+		context.beginPath();
+		//文本的度量
+		context.textAlign = "left";
+		context.textBaseline = "middle";
+		context.font = "bold 40px sans-serif";
+		context.fillText("canvas API", 50, 850);
+
+		var textWidth = context.measureText("canvas API").width;
+		context.fillText("上面字符的长度是" + textWidth + "px", 50,900);
+
+
+	}
+
+
+	</script>
+</body>
+</html>
