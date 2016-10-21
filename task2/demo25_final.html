@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo25_final</title>
+		<style>
+		body,html{
+			width:100%;
+			height:100%;
+			padding:0;
+			margin:0;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+	
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
+		var context = canvas.getContext("2d");
+
+		CanvasRenderingContext2D.prototype.fillStar = function(r,R,x,y,rot){
+			this.beginPath();
+			for(var i = 0 ; i < 5 ; i++ ){
+				this.lineTo( 
+					Math.cos((18 + i * 72 - rot) / 180 * Math.PI) * R + x,
+					-Math.sin((18 + i * 72 - rot) / 180 * Math.PI) * R + y);
+				this.lineTo(
+					Math.cos((54 + i * 72 - rot) / 180 * Math.PI) * r + x,
+					-Math.sin((54 + i * 72 - rot) / 180 * Math.PI) * r + y
+					);			
+			}
+			this.closePath();
+			this.fill();
+		}
+		context.fillStyle = "#058";
+		context.fillStar(150,300,400,400,0);
+
+	}
+
+
+	</script>
+</body>
+</html>
