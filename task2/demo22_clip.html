@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo22_clip</title>
+		<style>
+		body,html{
+			width:100%;
+			height:100%;
+			padding:0;
+			margin:0;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
+		var context = canvas.getContext("2d");
+		var light = {
+			x:canvas.width/2,
+			y:canvas.height/2,
+			vx: Math.random()*5+5,
+			vy: Math.random()*5+5,
+			r:100
+		}
+
+		// 剪辑区域
+		// context.clip()
+		// 和之前的路径规划函数 lineTo arc   贝塞尔等这些围城路径来一起使用
+		// 1.指定一个特殊区域:
+
+		setInterval(function(){
+			drawLight(context);
+			updateLight(canvas.width,canvas.height);
+		},30)
+
+
+
+		function drawLight(cxt){
+			var canvas = cxt.canvas;
+			cxt.clearRect(0,0,canvas.width,canvas.height);
+
+			cxt.save();
+			cxt.beginPath();
+			cxt.fillStyle = "black";
+			cxt.fillRect(0,0,canvas.width,canvas.height);
+			
+
+			cxt.beginPath();
+			cxt.fillStyle = "white";
+			cxt.arc(light.x,light.y,light.r,0,2*Math.PI);
+			cxt.fill();
+			cxt.clip();
+
+
+			cxt.font = "bold 150px Arial";
+			cxt.textAlign = "center";
+			cxt.textBaseline = "middle";
+			cxt.fillStyle = "#058";
+			cxt.fillText("Canvas",canvas.width/2,canvas.height/2);
+			cxt.restore();
+		}
+		function updateLight(width,height){
+			light.x += light.vx;
+			light.y += light.vy;
+			if(light.x - light.r <= 0){
+				light.x = light.r;
+				light.vx = -light.vx;
+			}
+			if(light.x + light.r >= width){
+				light.x = width - light.r;
+				light.vx = -light.vx;
+			}
+			if(light.y - light.r <= 0){
+				light.y = light.r;
+				light.vy = -light.vy;
+			}
+			if(light.y + light.r >= height){
+				light.y = height - light.r;
+				light.vy = -light.vy;
+			}
+
+		}
+
+
+	}
+
+
+	</script>
+</body>
+</html>
