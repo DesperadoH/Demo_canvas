@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo23_</title>
+		<style>
+		body,html{
+			width:100%;
+			height:100%;
+			padding:0;
+			margin:0;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
+		var context = canvas.getContext("2d");
+
+		// 路径方向和剪纸系统
+		// 非零环绕原则 镂空效果 图形的绘制路径很重要
+
+		context.fillStyle = "blue";
+		//顺时针
+		context.rect(100,100,200,200);
+		//逆时针
+		context.arc(200,200,20,0,2*Math.PI,true);
+
+		context.shadowColor = "gray";
+		context.shadowOffsetX = 10;
+		context.shadowOffsetY = 10;
+		context.shadowBlur = 2;
+
+		context.fill();
+
+
+
+
+
+
+
+
+
+	}
+
+
+	</script>
+</body>
+</html>
