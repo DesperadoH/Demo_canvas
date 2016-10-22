@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>demo2_drawImage</title>
+	<title>demo3_drawImage</title>
 		<style>
 		body,html{
 			width:100%;
@@ -35,11 +35,12 @@
 		// context.drawImage(img,dx,dy,dw,dh)
 		// context.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh)
 		// 把原图像img的 起始位置为 sx sy 宽高为 sw sh的图像绘制到画布的 dx dy 位置，并且在画布上的宽高为dw dh
-
-
-
-
-
+		// 不一定要传入图形对象img 还可以传入canvas
+		// context.drawImage(canvas,dx,dy)
+		// context.drawImage(canvas,dx,dy,dw,dh)
+		// context.drawImage(canvas,sx,sy,sw,sh,dx,dy,dw,dh)
+		// 可以在一个canvas中绘制图形，再把这个canvas添加到另一个canvas
+		// 应用是 给图 加水印
 
 		var range = document.getElementById("range");
 		var scale = range.value;
@@ -68,7 +69,13 @@
 			context.drawImage(img,dx,dy,imgW,imgH);
 			
 		}
-		
+
+
+
+
+
+
+
 		
 	}
 
