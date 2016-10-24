@@ -10,29 +10,271 @@
 			padding:0;
 			margin:0;
 		}
-		#canvas{
-			display: block;
-			width:100%;
-			height:100%;
+		canvas{
+			display: inline-block;
 			border:1px solid black;
 		}
 	</style>
 </head>
 <body>
-	<canvas id="canvas"></canvas>
+	<div style="margin:20px auto; width:1300px;">
+		<canvas id="canvasa" width="600" height="480"></canvas>
+		<canvas id="canvasb" width="600" height="480"></canvas>
 
+	</div>
+
+	<div style="text-align:center;margin-top:50px;font-size:20px">
+		<button id="btn_grey">grey</button>
+		<button id="btn_black_white">black&white</button>
+		<button id="btn_reverse">reverse</button>
+		<button id="btn_blur">blur</button>
+		<button id="btn_mosaic">mosaic</button>
+	</div>
 
 	<script>
+		var canvasA = document.getElementById("canvasa"),
+		    contextA = canvasA.getContext("2d"),
+		    canvasB = document.getElementById("canvasb")
+		    contextB = canvasB.getContext("2d"),
+		    btn_grey = document.getElementById("btn_grey"),
+		    btn_reverse = document.getElementById("btn_reverse"),
+		    btn_blur = document.getElementById("btn_blur"),
+		    btn_mosaic = document.getElementById("btn_mosaic"),
+		    btn_black_white= document.getElementById("btn_black_white");
+		var image = new Image();
 	
 	window.onload = function(){
-		var canvas = document.getElementById("canvas");
-			canvas.width = document.body.clientWidth;
-			canvas.height = document.body.clientHeight;
-		var context = canvas.getContext("2d");
+		
+		//对图像进行像素级别的处理
+		// 获取
+		// imgData = context.getImageData(x,y,w,h)
+		// ImageData对象
+		// 		width
+		// 		height
+		// 		data
+		// 		
+		// 		
+
+		// 将已知的imageData 放置在画布中
+		// context.putImageData(
+		// 		imageData,
+		// 		dx , dy ,
+		// 		dirtyX , dirtY,
+		// 		dirtyW , dirtyH
+		// )
 
 
+		image.src = "1.jpg";
+		image.onload = function(){
+
+		contextA.drawImage(image,0,0,canvasA.width,canvasA.height);
+			
+		}
+		//在chrome下会发生错误
+
+// Uncaught SecurityError: Failed to execute 'getImageData' on 'CanvasRenderingContext2D': The canvas has been tainted by cross-origin data.
+
+// 大概意思就是发生了跨域操作，也就是指图片的来源和当前的网页来源不同时，造成了跨域，据说放到服务器上加载就会解决这个问题，但是firefox却没问题，具体原理我也不懂，老师的代码放到了本地模拟的服务器环境可以顺利运行，出错的同学应该是和我一样直接加载到浏览器运行的
+		btn_grey.onclick = greyEffect;
+		btn_black_white.onclick = black_whiteEffect;
+		btn_reverse.onclick = reverseEffect;
+		btn_blur.onclick = blurEffect;
+		btn_mosaic.onclick = mosaicEffect;
+
+		// 马赛克
+		function mosaicEffect(){
+			contextB.clearRect(0,0,canvasB.width,canvasB.height);
+			// 原始数据
+			var imageData = contextA.getImageData(0,0,canvasA.width,canvasA.height);
+			var pixelData = imageData.data;
+			// 参考的数据
+			var tmpImageData = contextA.getImageData(0,0,canvasA.width,canvasA.height);
+			var tmpPixelData = tmpImageData.data;
+
+			// 马赛克块的边长 长和宽都能被 600 480整除
+			var size = 10;
+			var totalNum = size * size;
+			// 遍历每一个马赛克块
+			for(var i = 0 ; i < canvasB.height ; i += size){
+				for(var j = 0 ; j < canvasB.width ; j += size){
+
+					var totalr = 0;
+					var totalg = 0;
+					var totalb = 0;
+
+					//遍历 size 个块 取得总的 totalr totalg totalb
+					for(var dx = 0; dx < size; dx++){
+						for(var dy = 0; dy < size; dy++){
+							var x = i + dx;
+							var y = j + dy;
+							var p = x*canvasB.width + y;
+
+							totalr += tmpPixelData[p*4+0];
+							totalg += tmpPixelData[p*4+1];
+							totalb += tmpPixelData[p*4+2];
+						}
+					}
+
+					var p = i * canvasB.width + j;
+					//取得最后值
+					var resr = totalr / totalNum;
+					var resg = totalg / totalNum;
+					var resb = totalb / totalNum;
+					// 遍历某块所有点
+					for(var dx = 0; dx < size; dx++ ){
+						for(var dy = 0; dy < size; dy++){
+							var x = i + dx;
+							var y = j + dy;
+							var p = x * canvasB.width + y;
+
+							pixelData[p*4 + 0] = resr;
+							pixelData[p*4 + 1] = resg;
+							pixelData[p*4 + 2] = resb;
+						}
+					}
+					
+					
+				}
+			}
+
+			contextB.putImageData(imageData,0,0,0,0,canvasB.width,canvasB.height);
+		}
+
+
+
+		// 模糊滤镜
+		function blurEffect(){
+			contextB.clearRect(0,0,canvasB.width,canvasB.height);
+			// 原始数据
+			var imageData = contextA.getImageData(0,0,canvasA.width,canvasA.height);
+			var pixelData = imageData.data;
+			// 参考的数据
+			var tmpImageData = contextA.getImageData(0,0,canvasA.width,canvasA.height);
+			var tmpPixelData = tmpImageData.data;
+
+			// 模糊半径
+			var blurR = 4;
+			var totalNum = (2*blurR + 1)*(2*blurR + 1);
+			// 二维遍历 遍历高度和宽度
+			for(var i = blurR ; i < canvasB.height - blurR; i++){
+				for(var j = blurR ; j < canvasB.width - blurR; j++){
+
+					var totalr = 0;
+					var totalg = 0;
+					var totalb = 0;
+
+					//遍历 9 个点 取得总的 totalr totalg totalb
+					for(var dx = -blurR; dx <= blurR; dx++){
+						for(var dy = -blurR; dy <= blurR; dy++){
+							var x = i + dx;
+							var y = j + dy;
+
+							var p = x*canvasB.width + y;
+							totalr += tmpPixelData[p*4+0];
+							totalg += tmpPixelData[p*4+1];
+							totalb += tmpPixelData[p*4+2];
+						}
+					}
+
+					var p = i * canvasB.width + j;
+					// 遍历每一个点周围的 8 个像素连同 p 自己一共 9个像素计算平均值
+					
+					pixelData[p*4 + 0] = totalr/totalNum;
+					pixelData[p*4 + 1] = totalg/totalNum;
+					pixelData[p*4 + 2] = totalb/totalNum;
+				}
+			}
+
+			contextB.putImageData(imageData,0,0,0,0,canvasB.width,canvasB.height);
+		}
+
+		// 反色滤镜
+		function reverseEffect(){
+			contextB.clearRect(0,0,canvasB.width,canvasB.height);
+			var imageData = contextA.getImageData(0,0,canvasA.width,canvasA.height);
+			var pixelData = imageData.data;
+
+			for( var i = 0 ; i < canvasB.width*canvasB.height; i++){
+				var r = pixelData[4*i + 0],
+					g =	pixelData[4*i + 1],
+				    b = pixelData[4*i + 2];
+				pixelData[4*i + 0] = 255 - r;
+				pixelData[4*i + 1] = 255 - g;
+				pixelData[4*i + 2] = 255 - b;
+			}
+
+			contextB.putImageData(imageData,0,0,0,0,canvasB.width,canvasB.height);
+		}
+		// 黑白
+		function black_whiteEffect(){
+			contextB.clearRect(0,0,canvasB.width,canvasB.height);
+			var imageData = contextA.getImageData(0,0,canvasA.width,canvasA.height);
+			var pixelData = imageData.data;
+
+			for( var i = 0 ; i < canvasB.width*canvasB.height; i++){
+				var r = pixelData[4*i + 0],
+					g =	pixelData[4*i + 1],
+				    b = pixelData[4*i + 2];
+
+				var grey = r*0.3 + g*0.59 + b*0.11;
+				var v;
+				if(grey > 255/2){
+					v = 255;
+				}else{
+					v = 0;
+				}
+				pixelData[4*i + 0] = v;
+				pixelData[4*i + 1] = v;
+				pixelData[4*i + 2] = v;
+			}
+
+			contextB.putImageData(imageData,0,0,0,0,canvasB.width,canvasB.height);
+		}
+		// 灰度
+		function greyEffect(){
+			contextB.clearRect(0,0,canvasB.width,canvasB.height);
+			var imageData = contextA.getImageData(0,0,canvasA.width,canvasA.height);
+			var pixelData = imageData.data;
+			
+			// data 如何存储像素信息？
+			// canvas中把像素转换成一个一维数组
+			//   0 1 2 3 		4 5 6 7
+			//   r g b a 		r g b a
+			//  第一个像素    第二个像素
+			// 
+			// 第 i 个像素
+			// r - pixelData[4*i+0];
+			// g - pixelData[4*i+1];
+			// b - pixelData[4*i+2];
+			// a - pixelData[4*i+3];
+			// 
+			// 第 x 行 第 y 列的像素:
+			//  i = x * width + y
+			//  r - pixelData[4*i+0];
+			//  g - pixelData[4*i+1];
+			//  b - pixelData[4*i+2];
+			//  a - pixelData[4*i+3];
+			//  
+
+			// 像素级操作 把r g b 三个通道的值操作为 相应的数
+			for( var i = 0 ; i < canvasB.width*canvasB.height; i++){
+				var r = pixelData[4*i + 0],
+					g =	pixelData[4*i + 1],
+				    b = pixelData[4*i + 2];
+
+				var grey = r*0.3 + g*0.59 + b*0.11;
+				 
+				pixelData[4*i + 0] = grey;
+				pixelData[4*i + 1] = grey;
+				pixelData[4*i + 2] = grey;
+			}
+
+			contextB.putImageData(imageData,0,0,0,0,canvasB.width,canvasB.height);
+		}
 
 	}
+
+
 
 
 	</script>
