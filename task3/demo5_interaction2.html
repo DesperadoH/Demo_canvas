@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo1_drawImage</title>
+		<style>
+		body,html{
+			width:100%;
+			height:100%;
+			padding:0;
+			margin:0;
+		}
+		#canvas{
+			display: block;
+			width:100%;
+			height:100%;
+			border:1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+
+	<script>
+	
+	window.onload = function(){
+		var canvas = document.getElementById("canvas");
+			canvas.width = document.body.clientWidth;
+			canvas.height = document.body.clientHeight;
+		var context = canvas.getContext("2d");
+
+
+		// 1
+		//  drawImage
+		//  drawImage(img,x,y)//drawImage 使用图片原有尺寸
+		//  var img1 = new Image();
+		// 	img1.src = "1.jpg";
+		// 	img1.onload = function(){
+				
+		// 		context.drawImage(img1,0,0);
+		// 	}
+
+		// 2
+		//  drawImage(img,dx,dy,dwidth,dheight)	 d destination
+		var img2 = new Image();
+			img2.src = "2.jpg";
+			img2.onload = function(){
+				context.drawImage(img2,0,0,canvas.width,canvas.height);
+			}
+		// 3
+		//  drawImage(
+		//  	img,
+		//  	sx, sy, sw, sh
+		//  	dx, dy, dw, dh
+		//  )
+		// 把原来的(s)图像的sx,sy处开始大小为sw,sh的图放在
+		// dx,dy,并且大小为dw,dh
+		var img3 = new Image();
+			img3.src = "1.jpg";
+			img3.onload = function(){
+				context.drawImage(img3,0,0,canvas.width,canvas.height,0,0,canvas.width,canvas.height);
+			}
+
+	}
+
+
+	</script>
+</body>
+</html>
