@@ -88,10 +88,8 @@
 					if(parseInt(nextSec%10) != parseInt(currentSec%10)){
 							addBalls(LEFT + 93*(RADIUS + 1)+(RADIUS + 1), TOP, parseInt(currentSec%10));
 					}
-					console.log("no");
+					
 					curShowTimeSec = nextTime;
-				}else{
-					console.log("yes");
 				}
 
 
@@ -101,10 +99,13 @@
 			function render(cxt){
 
 				cxt.clearRect(0, 0, canvas.width, canvas.height);
-				var hours = parseInt(curShowTimeSec / 3600);
-				var min = parseInt((curShowTimeSec - hours*3600) / 60);
-				var sec = parseInt(curShowTimeSec % 60);
-
+				// var hours = parseInt(curShowTimeSec / 3600);
+				// var min = parseInt((curShowTimeSec - hours*3600) / 60);
+				// var sec = parseInt(curShowTimeSec % 60);
+				var now = new Date();
+				var hours = now.getHours();
+				var min = now.getMinutes();
+				var sec = now.getSeconds();
 				//时
 				renderDigit(LEFT, TOP, parseInt(hours/10), cxt);
 				renderDigit(LEFT + 15*(RADIUS + 1)+(RADIUS + 1), TOP, parseInt(hours%10), cxt);

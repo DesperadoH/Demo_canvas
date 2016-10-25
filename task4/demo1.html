@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>time</title>
+	<style>
+
+		#canvas{
+			display: block;
+			border:1px solid black;
+			margin:50px auto;
+		}
+	
+
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="480" height="480" >
+
+	</canvas>
+
+
+	<script>
+		var canvas = document.getElementById("canvas");
+		var context = canvas.getContext("2d");
+		var width = canvas.width;
+		var height = canvas.height;
+		var r = width / 2;
+		var num = [3,4,5,6,7,8,9,10,11,12,1,2];
+
+			window.onload = function(){
+				
+				draw();
+				setInterval(draw,500);
+			}
+		function draw(){
+
+			context.clearRect(0,0,canvas.width,canvas.height);
+			context.save();
+			context.translate(width/2,height/2);
+			
+			var now = new Date(),
+			    hour = now.getHours(),
+			    min = now.getMinutes(),
+			    sec = now.getSeconds();
+
+				drawBackground();
+				drawHour(hour,min);
+				
+				drawMin(min);
+				drawSec(sec);
+				drawDot();
+			context.restore();
+		}
+		function drawDot(){
+				context.save();
+				context.beginPath();
+				context.fillStyle = "white";
+				context.strokeStyle = "black";
+				context.lineWidth = 1;
+				context.arc(0,0,r/50,0,2*Math.PI);
+				context.fill();
+				context.stroke();
+				context.restore();
+		}
+		// 绘制背景
+		function drawBackground(){
+			// 绘制最外层黑色大圈
+			context.save();	
+			context.beginPath();
+			context.lineWidth = 8;
+			context.arc(0,0,r*8/10,0,2*Math.PI);
+			context.stroke();
+			context.restore();
+			//绘制灰色的圈
+			context.save();
+			context.beginPath();
+			context.strokeStyle = "grey";
+			context.lineWidth = 2;
+			context.arc(0,0,r*7/10,0,2*Math.PI);
+			context.stroke();
+			context.restore();
+
+			// 绘制数字
+			// context.font = "20px Arial";
+			context.save();
+			context.font = canvas.width / 16 + "px Arial";
+			context.textAlign = "center";
+			context.textBaseline = "middle";
+			for(var i = 0, len = num.length; i < len; i++){
+				var rad = 2*Math.PI/12*i;
+				var x = Math.cos(rad) * r * 0.6;
+				var y = Math.sin(rad) * r * 0.6;
+				context.fillText(num[i], x, y);
+			}
+			context.restore();
+
+			// 绘制刻度
+			for(var i = 0 ; i < 60; i++){
+				var rad = 2*Math.PI/60*i;
+				var x1 = Math.cos(rad) * r * 0.7;
+				var y1 = Math.sin(rad) * r * 0.7;
+				var x2 = Math.cos(rad) * r * 0.68;
+				var y2 = Math.sin(rad) * r * 0.68;
+				if( i%5 === 0){
+					x2 = Math.cos(rad) * r * 0.66;
+					y2 = Math.sin(rad) * r * 0.66;
+				}
+				context.save();
+				context.lineWidth = 1;
+				context.lineCap = "round";
+				context.strokeStyle = "grey";
+				context.beginPath();
+				context.moveTo(x1,y1);
+				context.lineTo(x2,y2);
+				context.closePath();
+				context.stroke();
+				context.restore();
+			}
+
+		}	
+
+		function drawHour(hour,min){
+			var rad = 2* Math.PI / 12 * hour + 2 * Math.PI * min / 12 / 60 ;
+			context.save();
+			context.beginPath();
+			context.rotate(rad);
+			context.lineWidth = canvas.width/50;
+			context.lineCap = "round";
+			// 时针分针秒针都有一个尾巴 要向相反方向移动一点
+			context.moveTo(0,10);
+			context.lineTo(0,-r*0.4);
+			context.stroke();
+			context.closePath();
+			context.restore();
+		}
+		function drawMin(min){
+			var rad = min * 2 * Math.PI / 60;
+			context.save();
+			context.beginPath();
+			context.rotate(rad);
+			context.lineWidth = canvas.width/80;
+			context.lineCap = "round";
+			// 时针分针秒针都有一个尾巴 要向相反方向移动一点
+			context.moveTo(0,12);
+			context.lineTo(0,-r*0.55);
+			context.stroke();
+			context.closePath();
+			context.restore();
+		}
+		function drawSec(sec){
+			var rad = sec * 2 * Math.PI / 60;
+			context.save();
+			context.beginPath();
+			context.rotate(rad);
+			context.lineWidth = canvas.width / 200;
+			context.strokeStyle = "red";
+			context.lineCap = "round";
+			// 时针分针秒针都有一个尾巴 要向相反方向移动一点
+			context.moveTo(0,15);
+			context.lineTo(0,-r*0.6);
+			context.stroke();
+			context.closePath();
+			context.restore();
+		}
+		
+
+	</script>
+</body>
+</html>
