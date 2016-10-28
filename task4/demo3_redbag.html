@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>redbag</title>
+	<meta name="viewport" 
+		  content="height=device-height,
+		  			width=device-width,
+		  			minimum-scale=1.0,
+		  			maximum-scale=1.0,
+		  			user-scalable=no">
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		#box{
+			position: relative;
+			overflow: hidden;
+		}
+		#canvas{
+			display: block;
+			border:1px solid black;
+			position: absolute;
+			left:0;
+			top:0;
+			z-index: 100;
+			
+		}
+		button{
+			position: absolute;
+			width: 60px;
+			height: 30px;
+			line-height: 30px;
+			z-index: 200;
+			bottom: 40px;
+			text-align: center;	
+			border: none;
+			border-radius: 4px;
+			font-weight: bold;
+			color: white;
+			cursor: pointer;
+		}
+		#show{
+			background-color: #085;
+			right:15%;
+			
+		}
+		#show:hover{
+			background-color: #074;
+		}
+		#reset{
+			background-color: #058;
+			left:15%;
+		}
+		#reset:hover{
+			background-color: #047;
+		}
+		#blur-image{
+			display: block;
+			position: absolute;
+			left:0;
+			top:0;
+			z-index: 0;
+			margin:0 auto;
+			
+			-webkit-filter: blur(10px);
+			-moz-filter: blur(10px);
+			-ms-filter: blur(10px);
+			-o-filter: blur(10px);
+			filter: blur(10px);
+			/* blur default 0px
+			
+
+
+			*/
+		}
+
+	</style>
+</head>
+<body>
+	<div id="box">
+		<img id="blur-image" src="1280x720.jpg" alt="">
+		<canvas id="canvas">
+
+		</canvas>
+		<button id="reset">RESET</button>
+		<button id="show">SHOW</button>
+	</div>
+	
+	
+
+	<script>
+		// css3 filter
+		var canvas = document.getElementById("canvas"),
+			img = document.querySelector("#blur-image"),
+			box = document.querySelector("#box"),
+			reset = document.querySelector("#reset"),
+			show = document.querySelector("#show");
+
+		var canvasWidth = window.innerWidth;
+			canvasHeight = window.innerHeight;
+			canvas.width = canvasWidth;
+			canvas.height = canvasHeight;
+
+		var context = canvas.getContext("2d");
+
+		var time;
+		var r = 100,
+			count = 15;
+		var leftMargin = 0;
+		var topMargin = 0;
+		var clippingRegion = {
+				x: parseInt(Math.random()*(canvas.width - 2*r) + r),
+				y: parseInt(Math.random()*(canvas.height - 2*r) + r),
+				r: r
+			};	
+		var image = new Image();
+			image.src = "1280x720.jpg";
+			image.onload = function(){
+				box.style.cssText = "width:"+ canvas.width +"px;height:" +canvas.height+ "px;";
+				img.style.cssText = "width:"+ image.width +"px;height:" + image.height + "px;";
+				leftMargin = (image.width - canvas.width )/2;
+				topMargin = (image.height - canvas.height )/2;
+				img.style.left = -leftMargin + 'px';
+				img.style.top = -topMargin + 'px';
+				reset.onclick();
+			}
+
+		show.onclick = showFun;
+		reset.onclick = resetFun;
+
+		function initCanvas(){
+			draw(image);
+		}
+
+		function draw(image){
+			context.clearRect(0,0,canvas.width,canvas.height);
+			context.save();
+			// 设定剪辑区域
+			setClippingRegion();
+			context.drawImage(image,leftMargin,topMargin,canvas.width,canvas.height,0,0,canvas.width,canvas.height);
+			context.restore();
+		}
+		function setClippingRegion(){
+
+			context.beginPath();
+			context.arc(
+				clippingRegion.x,
+				clippingRegion.y,
+				clippingRegion.r,
+				0,
+				2*Math.PI,
+				false
+			)
+			context.clip();
+	
+		}
+		function updateClippingRegion(){
+			// clippingRegion.r = Math.random()*100 + 50;
+			clippingRegion.r = 20;
+			var r = 100,
+				x = parseInt(Math.random()*(canvas.width - 2*r) + r),
+				y = parseInt(Math.random()*(canvas.height - 2*r) + r);
+
+			clippingRegion.x = x;
+			clippingRegion.y = y;
+			
+
+		}
+		
+		function showFun(){
+			clearInterval(time);
+			time = setInterval(
+
+				function(){
+					console.log(1);
+					clippingRegion.r += count;
+					draw(image);
+					if(clippingRegion.r > 2*Math.max(canvas.width,canvas.height)){
+						clearInterval(time);
+					}
+				}
+				,30);
+			
+		}
+		function resetFun(){
+			clearInterval(time);
+			updateClippingRegion();
+			clearInterval(resetTime);
+			var resetTime = setInterval(
+				function(){
+					clippingRegion.r += 2;
+					if(clippingRegion.r >= 100){
+						clippingRegion.r = 100;
+						clearInterval(resetTime);
+					}
+					draw(image);
+				}
+				,30
+				)
+			
+		}
+
+
+
+		
+
+
+		
+
+	</script>
+</body>
+</html>

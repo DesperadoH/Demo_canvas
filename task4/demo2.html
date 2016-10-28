@@ -42,11 +42,11 @@
 			var starImg = new Image();
 			var stars = [];
 			var starsNum = 30;
-			var pos = [0,7,14,21,28,35,42,49];
+			
 			
 		window.onload = function(){
 
-			alert("\u0048");
+			
 			img.src = "girl.jpg";
 			starImg.src = "star.png";
 			init();
@@ -95,29 +95,33 @@
 			}
 		}
 		function drawStar(){
-
-			for(var i = 0 , len = stars.length; i < len ;i++){
-				context.save();	
-				context.drawImage(starImg,stars[i].sx * stars[i].vx,stars[i].sy,7,7,stars[i].dx,stars[i].dy,7,7);
-				context.restore();
+			context.save();	
+			context.globalAlpha = 0.6;
+			for(var i = 0 , len = stars.length; i < len; i++){
+				context.drawImage(starImg,stars[i].sx * stars[i].vx,stars[i].sy,7,7,stars[i].dx,stars[i].dy,2*7,2*7);		
 			}
+			context.restore();
 		}
 		function updateStars(){
 			for(var i = 0 ; i < starsNum ; i++){
+				
 				stars[i].vx += 1;
 				stars[i].dy += stars[i].vy;
 				if(stars[i].vx > 7){
 					stars[i].vx = 0;
 					
 				}
+
 				
 				if(stars[i].dy < 150){
 					// stars[i].dy = 150;
 					stars[i].vy = -stars[i].vy;
+					stars[i].dx = Math.random()*600 + 100;
 				}
 				if(stars[i].dy > 450){
 					// stars[i].dy = 450;
 					stars[i].vy = -stars[i].vy;
+					stars[i].dx = Math.random()*600 + 100;
 				}
 			}
 		}
