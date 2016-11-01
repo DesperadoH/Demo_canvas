@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>write</title>
+	<style>
+		
+		#canvas{
+			display: block;
+			margin: 0 auto;
+		}
+	
+
+	</style>
+</head>
+<body>
+	<canvas id="canvas" >
+
+	</canvas>
+
+
+	<script>
+
+		var isMouseDown = false;
+		var canvasWidth = 600,
+			canvasHeight = 600,
+			strokeStyle = "black";
+		var lastPos = {x:0, y:0},
+		    lastTime = 0,
+		    lastLineWidth = -1;
+
+
+
+		// context.setLineDash([10,10]); 画虚线
+		var canvas = document.getElementById("canvas");
+		var context = canvas.getContext("2d");
+		
+		canvas.width = canvasWidth;
+		canvas.height = canvasHeight;
+		
+
+		window.onload = function(){
+
+			drawGrid();
+
+
+			canvas.onmousedown = event => {
+				event.preventDefault();
+				beginStroke({x:event.clientX,y:event.clientY});
+				
+			}
+			canvas.onmouseup = event => {
+				event.preventDefault();
+				endStroke();
+				
+			}
+
+			canvas.onmousemove = event => {
+				event.preventDefault();
+				if(isMouseDown){
+					moveStroke({x:event.clientX,y:event.clientY});
+				}
+				
+			}
+			canvas.onmouseout = event => {
+				event.preventDefault();
+				endStroke();
+				
+			}
+
+
+
+
+
+		}
+
+
+		
+
+		function beginStroke(ev){
+			isMouseDown = true;
+			var position = windowToCanvas(ev.x,ev.y);
+			lastPos.x = position.x;
+			lastPos.y = position.y;
+			lastTime = Date.now();
+		}
+		function endStroke(){
+			isMouseDown = false;
+		}	
+		function moveStroke(ev){
+			var currentPos = windowToCanvas(ev.x,ev.y);
+			var currentTime = Date.now();
+			var disTime = currentTime - lastTime;
+			var distance = calcDistance(lastPos.x,lastPos.y,currentPos.x,currentPos.y);
+			var lineWidth = calcLineWidth(disTime,distance);
+
+			context.beginPath();
+			context.lineTo(lastPos.x,lastPos.y);
+			context.lineTo(currentPos.x,currentPos.y);
+			context.lineCap = "round";
+			context.lineJoin = "round";
+			context.lineWidth = lineWidth;
+			context.strokeStyle = strokeStyle;
+			context.stroke();
+
+			lastTime = currentTime;
+			lastPos = currentPos;
+			lastLineWidth = lineWidth;
+		}
+
+
+		var maxLineWidth = 20,
+			minLineWidth = 2,
+			maxStrokeV = 10,
+			minStrokeV = 0.1;
+
+		function calcLineWidth(t, s){
+			var v = Math.round(s / t);
+			var result;
+			if(v <= minStrokeV){
+				result = maxLineWidth;
+			}else if( v >= maxStrokeV){
+				result = minLineWidth;
+			}else {
+				result = maxLineWidth - (v - minStrokeV)/(maxStrokeV - minStrokeV)*(maxLineWidth - minLineWidth);
+			}
+			if(lastLineWidth === -1){
+				return result;
+			}
+			return result/3 + lastLineWidth*2/3;
+		}
+		function calcDistance(x1,y1,x2,y2){
+			return Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+		}
+
+
+		function windowToCanvas(x,y){
+			var box = canvas.getBoundingClientRect();
+			return {
+				x: Math.round(x - box.left),
+				y: Math.round(y - box.top)
+				}
+				
+		}
+
+
+		function drawGrid(){
+			context.save();
+			context.beginPath();
+			context.strokeStyle = "rgb(230,11,9)";
+			context.lineWidth = 6;
+			context.moveTo(3,3);
+			context.lineTo(canvasWidth - 3,3);
+			context.lineTo(canvasWidth - 3, canvasHeight - 3);
+			context.lineTo(3, canvasHeight - 3);
+			context.closePath();
+			context.stroke();
+			
+			context.beginPath();
+			context.moveTo(0,0);
+			context.lineTo(canvasWidth,canvasHeight);
+
+			context.moveTo(canvasWidth,0);
+			context.lineTo(0,canvasHeight);
+
+			context.moveTo(canvasWidth/2,0);
+			context.lineTo(canvasWidth/2,canvasHeight);
+
+			context.moveTo(0,canvasHeight/2);
+			context.lineTo(canvasWidth,canvasHeight/2);
+			context.setLineDash([10,10]);
+			context.lineWidth = 1;
+			context.stroke();
+			context.restore();
+		}
+
+
+
+
+
+
+	</script>
+</body>
+</html>

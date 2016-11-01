@@ -124,7 +124,11 @@
 				topMargin = (image.height - canvas.height )/2;
 				img.style.left = -leftMargin + 'px';
 				img.style.top = -topMargin + 'px';
+
 				reset.onclick();
+				canvas.addEventListener("touchstart",function(e){
+					e.preventDefault();
+				})
 			}
 
 		show.onclick = showFun;
