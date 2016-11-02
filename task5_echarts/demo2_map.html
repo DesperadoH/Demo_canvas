@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo2</title>
+	<style>
+
+		#canvas{
+			border:1px solid black;
+			display: block;
+			margin: 0 auto;
+		}
+
+	</style>
+</head>
+<body>
+	
+	<canvas id="canvas" width="800" height="600">
+		
+	</canvas>
+
+	<script type="text/javascript" src="src/echarts.min.js"></script>
+	<script type="text/javascript" src="src/dark.js"></script>
+	<script type="text/javascript" src="src/china.js"></script>
+	<script type="text/javascript" src="src/data1_pm2.5.js"></script>
+	<script>
+
+		var canvas = document.getElementById("canvas");
+			canvas.width = 800;
+			canvas.height = 600;
+		var myChart = echarts.init(canvas,"dark");
+		myChart.showLoading();
+		var convertData = function(data){
+			var arr = [];
+			for(var i = 0, len = data.length; i < len; i++){
+				var geoCoord = geoCoordMap[data[i].name];
+				if(geoCoord){
+					arr.push({
+						name: data[i].name,
+						value: geoCoord.concat(data[i].value)
+					})
+				}
+			}
+			return arr;
+		}
+		
+		window.onload = function(){
+			
+			myChart.hideLoading();
+			draw();
+		}
+		
+		function draw(){
+
+			var option = {
+				backgroundColor: "#404a59",
+				title: {
+					text: " 全国主要城市空气质量",
+					subtext: 'data from PM25.in',
+					sublink: 'http://www.pm25.in',
+					left: 'center',
+					textStyle: {
+						color: '#fff'
+					}
+				},
+				tooltip: {
+					trigger: 'item'
+				},
+				legend: {
+					orient: 'vertical',
+					y: 'bottom',
+					x: 'right',
+					data: ['pm2.5'],
+					textStyle: {
+						color: '#aaa'
+					}
+				},
+				geo: {
+					map: 'china',
+					label: {
+						emphasis: {
+							show: false
+						}
+					},
+					roam: true,
+					itemStyle: {
+						normal: {
+							areaColor: '#323c48',
+							borderColor: '#111'
+						},
+						emphasis: {
+							areaColor: '#2a333d'
+						}
+					}
+				},
+				series: [
+					{
+						name: 'pm2.5',
+						type: 'scatter',
+						coordinateSystem: 'geo',
+						data: convertData(data),
+						symbolSize: function(val){
+							return val[2]/10;
+						},
+						label: {
+							normal: {
+								formatter: '{b}',
+								position: 'right',
+								show: false
+							},
+							emphasis: {
+								show:true
+							}
+						},
+						itemStyle:{
+							normal: {
+								color: '#ddb927'
+							}
+						}
+					},
+					{
+						name: 'Top 5',
+						type: 'effectScatter',
+						coordinateSystem: 'geo',
+						data: convertData(data.sort(function(a,b){
+							return b.value - a.value;
+						}).slice(0,6)),
+						symbolSize: function(val){
+							return val[2] / 10;
+						},
+						showEffectOn: 'render',
+						rippleEffect: {
+							brushType: 'stroke'
+						},
+						hoverAnimation: true,
+						label: {
+							normal:{
+								formatter: '{b}',
+								position: 'right',
+								show:true
+							}
+						},
+						itemStyle:{
+							normal: {
+								color: '#f4e925',
+								shadowBlur: 10,
+								shadowColor: '#333'
+							}
+						},
+						zlevel:1
+					}
+				]
+
+
+
+
+			}
+
+
+
+
+			myChart.setOption(option);
+		}
+
+		
+
+
+
+
+
+
+
+
+	</script>
+
+</body>
+</html>

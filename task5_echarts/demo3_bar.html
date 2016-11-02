@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo3_bar</title>
+	<style>
+
+		#canvas{
+			border:1px solid black;
+			display: block;
+			margin: 0 auto;
+		}
+
+	</style>
+</head>
+<body>
+	
+	<canvas id="canvas" width="800" height="600">
+		
+	</canvas>
+
+	<script type="text/javascript" src="src/echarts.min.js"></script>
+	<script type="text/javascript" src="src/dark.js"></script>
+	<!-- <script type="text/javascript" src="src/china.js"></script> -->
+	<!-- <script type="text/javascript" src="src/data1_pm2.5.js"></script> -->
+	<script>
+
+		var canvas = document.getElementById("canvas");
+			canvas.width = 800;
+			canvas.height = 600;
+		var myChart = echarts.init(canvas,"dark");
+		myChart.showLoading();
+
+		
+		window.onload = function(){
+			
+			myChart.hideLoading();
+			draw();
+		}
+		
+		function draw(){
+
+		
+
+
+
+			myChart.setOption(option);
+		}
+
+		
+
+
+
+
+
+
+
+
+	</script>
+
+</body>
+</html>
